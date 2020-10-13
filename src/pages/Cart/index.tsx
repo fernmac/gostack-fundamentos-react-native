@@ -1,7 +1,12 @@
 import React, { useMemo } from 'react';
+
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import { View } from 'react-native';
+
+import { useCart } from '../../hooks/cart';
+
+import formatValue from '../../utils/formatValue';
 
 import {
   Container,
@@ -23,10 +28,6 @@ import {
   SubtotalValue,
 } from './styles';
 
-import { useCart } from '../../hooks/cart';
-
-import formatValue from '../../utils/formatValue';
-
 interface Product {
   id: string;
   title: string;
@@ -39,23 +40,25 @@ const Cart: React.FC = () => {
   const { increment, decrement, products } = useCart();
 
   function handleIncrement(id: string): void {
-    // TODO
+    increment(id);
   }
 
   function handleDecrement(id: string): void {
-    // TODO
+    decrement(id);
   }
 
   const cartTotal = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
-
-    return formatValue(0);
+    return formatValue(
+      products.reduce((acc, product) => {
+        return acc + product.price * product.quantity;
+      }, 0),
+    );
   }, [products]);
 
   const totalItensInCart = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
-
-    return 0;
+    return products.reduce((acc, product) => {
+      return acc + product.quantity;
+    }, 0);
   }, [products]);
 
   return (
